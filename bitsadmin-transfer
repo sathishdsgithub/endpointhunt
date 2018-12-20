@@ -1,0 +1,15 @@
+Transfers_File_Using_BITS.sql
+Transfers file using BITS
+
+SELECT DISTINCT
+	[se].[FK_Machines],
+	[se].[FK_MachineModulePaths],
+	[se].[PK_WinTrackingEvents] AS [FK_mocSentinelEvents]
+FROM
+	[dbo].[WinTrackingEventsCache] AS [se] WITH(NOLOCK)
+WHERE 
+	[se].[BehaviorProcessCreateProcess] = 1 AND
+	[se].[FileName_Target] = N'BITSADMIN.EXE' AND
+	[se].[LaunchArguments_Target] LIKE '%/TRANSFER%'
+OPTION (RECOMPILE);
+
